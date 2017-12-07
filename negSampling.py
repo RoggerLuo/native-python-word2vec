@@ -36,7 +36,7 @@ def get_cost_and_grad(centerword_vector, target_vector, negSamples_list, K=10):
     assert type(negSamples_list) == list
     assert type(negSamples_list[0]) == dict
     assert type(negSamples_list[0]['id']) == int
-    assert type(negSamples_list[0]['vector']) == np.ndarray
+    assert type(negSamples_list[0]['vector']) == list
     assert len(negSamples_list[0]['vector']) == 16
 
 

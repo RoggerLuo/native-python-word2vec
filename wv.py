@@ -2,6 +2,7 @@ import db_model
 import jieba
 import json
 import numpy as np
+import voca_model
 
 dimVectors = 8
 ignoreds = ['，', ',', '的', '是', '\n', ' ','(',')','.','/']
@@ -12,11 +13,8 @@ def getStartVector():
     zerosVector = np.random.rand(dimVectors)/10  #np.zeros((dimVectors))
     wordVectors = np.concatenate(
         (randomStartVector / dimVectors, zerosVector), axis=0)
-    # print(wordVectors)
-    # wordVectors = wordVectors.astype('float16')
     wordVectors = wordVectors.tolist()
     wordVectors = [round(vector, 5) for vector in wordVectors]
-    # print(wordVectors)
     return wordVectors
 
 
@@ -37,15 +35,15 @@ def filterWord(arr):
 
 
 def getIdAndVector(word):
-    entrys = db_model.getWordEntrys(word)
+    entrys = voca_model.getWordEntrys(word)
     if len(entrys) == 0:
         startVector = getStartVector()
-        insert_id = db_model.insertVocabulary(word, startVector)
+        insert_id = voca_model.insertVocabulary(word, startVector)
         return insert_id, startVector
     else:
-        vectorFetched = entrys[0][2]
-        vectorFetched = json.loads(vectorFetched)
-        entry_id = entrys[0][0]
+        vectorFetched = entrys[0]['vector']
+        vectorFetched = vectorFetched #json.loads(vectorFetched)
+        entry_id = entrys[0]['id']
         return entry_id, vectorFetched
 
 

@@ -6,11 +6,17 @@ import db_model
 import negSampling
 from q2_sigmoid import sigmoid, sigmoid_grad
 import globalVar
-
+import voca_model
 
 def update_o_grad(entry, grad):
+    # print('entry')
+    # print(type(entry['vector']))
+    # print(entry['vector'])
+
+    assert type(entry['vector']) == list
+
     step = globalVar.get('step')
-    vec = entry['vector']
+    vec = np.array(entry['vector'])
     zeroArr = np.zeros(int(len(vec) / 2))
     vec_grad = np.concatenate((zeroArr, np.array(grad)), axis=0)
     return vec - vec_grad * step
@@ -25,9 +31,9 @@ def update_i_grad(entry, grad):
 
 
 def getEntry_and_makeList(centerword):
-    entry = db_model.getWordEntrys(centerword)[0]
-    vec = np.array(json.loads(entry[2]))
-    return {'id': entry[0], 'vector': vec}, vec
+    entry = voca_model.getWordEntrys(centerword)[0]
+    vec = entry['vector']
+    return entry, vec
 
 
 def run(centerword, contextWords, negSamples_list):
@@ -37,6 +43,7 @@ def run(centerword, contextWords, negSamples_list):
     assert type(negSamples_list) == list
 
     cen_entry, cent_vec = getEntry_and_makeList(centerword)
+    cent_vec = np.array(cent_vec)
     cost = 0.0
     gradIn = []
     for targetword in contextWords:
@@ -56,11 +63,12 @@ def run(centerword, contextWords, negSamples_list):
         new_target_vec = update_o_grad(target_entry, ___target_o_grad)
         assert type(new_target_vec) == np.ndarray
         assert len(new_target_vec) == 16
-        db_model.update_vec(target_entry, new_target_vec)
+        voca_model.update_vec(target_entry, new_target_vec)
 
 
         for index in range(len(negSamples_list)):
             curr_entry = negSamples_list[index]
+
             assert type(curr_entry) == dict
 
             curr_grad = ___negSamples_grad[index]
@@ -68,6 +76,8 @@ def run(centerword, contextWords, negSamples_list):
 
             curr_vec = update_o_grad(curr_entry, curr_grad)
             assert type(curr_vec) == np.ndarray
+            curr_vec = curr_vec.tolist()
+            assert type(curr_vec) == list
             assert len(curr_vec) == 16
 
             negSamples_list[index]['vector'] = curr_vec  # 更新完才开始下一轮
@@ -78,12 +88,12 @@ def run(centerword, contextWords, negSamples_list):
     i_vec = update_i_grad(cen_entry, gradIn)
     assert type(i_vec) == np.ndarray
     assert len(i_vec) == 16
-    db_model.update_vec(cen_entry, i_vec)
+    voca_model.update_vec(cen_entry, i_vec)
 
     for sampleEntry in negSamples_list: 
-        assert type(sampleEntry['vector']) == np.ndarray
+        assert type(sampleEntry['vector']) == list
         assert len(sampleEntry['vector']) == 16
-        db_model.update_vec(sampleEntry, sampleEntry['vector'])
+        voca_model.update_vec(sampleEntry, sampleEntry['vector'])
 
     return cost
 
