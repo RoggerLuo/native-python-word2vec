@@ -9,6 +9,8 @@ def createJson():
 
 def saveJson():
     voca_model = globalVar.get('voca_model')  # 0.3 的效果不好
+    for i  in range(len(voca_model)):
+        voca_model[i]['vector'] = voca_model[i]['vector'].tolist()
     # voca_model = {'test': 'testValue'}  # 存放读取的数据
     with open("./data.json", 'w', encoding='utf-8') as json_file:
         json.dump(voca_model, json_file, ensure_ascii=False)
@@ -17,6 +19,9 @@ def saveJson():
 def readJson():
     with open("./data.json", 'r', encoding='utf-8') as json_file:
         voca_model = json.load(json_file)
+        for i  in range(len(voca_model)):
+            voca_model[i]['vector'] = np.array(voca_model[i]['vector'])
+
         globalVar.set('voca_model', voca_model)  # 0.3 的效果不好
         return voca_model
 
@@ -55,6 +60,7 @@ def insertVocabulary(word, startVector):
 def getNegSameples(contextWords, k=10):
     voca_model = globalVar.get('voca_model')
     num = len(voca_model) - 1
+    if num <= 0: return []
     voca_model = globalVar.get('voca_model')
     values = [] 
     for index in range(50):

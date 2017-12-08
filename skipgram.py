@@ -4,7 +4,6 @@ import wv
 import json
 import db_model
 import negSampling
-from q2_sigmoid import sigmoid, sigmoid_grad
 import globalVar
 import voca_model
 

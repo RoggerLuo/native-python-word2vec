@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import json
-from q2_sigmoid import sigmoid, sigmoid_grad
+from sigmoid import sigmoid, sigmoid_grad
 
 
 
