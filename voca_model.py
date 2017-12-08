@@ -22,12 +22,12 @@ def readJson():
 
 
 def update_vec(entry, vec):  # entry 直接传这个词所在的index
-    if type(vec) == np.ndarray:
-        vec = vec.tolist()            
+    # if type(vec) == np.ndarray:
+        # vec = vec.tolist()            
     # assert type(vec) == np.ndarray
-    vec = [round(v, 5) for v in vec]
+    # vec = [round(v, 5) for v in vec]
     # vec = json.dumps(vec)
-    assert type(vec) == list
+    assert type(vec) == np.ndarray
 
     voca_model = globalVar.get('voca_model')
     voca_model[entry['id']]['vector'] = vec
@@ -43,7 +43,8 @@ def getWordEntrys(word):
 
 
 def insertVocabulary(word, startVector):
-    startVector = [round(v, 5) for v in startVector]
+    assert type(startVector) == np.ndarray
+    # startVector = [round(v, 5) for v in startVector]
     # startStr = json.dumps(startVector)
     voca_model = globalVar.get('voca_model')
     insert_id = len(voca_model)-1
@@ -53,7 +54,7 @@ def insertVocabulary(word, startVector):
 
 def getNegSameples(contextWords, k=10):
     voca_model = globalVar.get('voca_model')
-    num = len(voca_model)-1
+    num = len(voca_model) - 1
     voca_model = globalVar.get('voca_model')
     values = [] 
     for index in range(50):

@@ -13,10 +13,11 @@ def update_o_grad(entry, grad):
     # print(type(entry['vector']))
     # print(entry['vector'])
 
-    assert type(entry['vector']) == list
+    assert type(entry['vector']) == np.ndarray
 
     step = globalVar.get('step')
-    vec = np.array(entry['vector'])
+    # vec = np.array(entry['vector'])
+    vec = entry['vector']
     zeroArr = np.zeros(int(len(vec) / 2))
     vec_grad = np.concatenate((zeroArr, np.array(grad)), axis=0)
     return vec - vec_grad * step
@@ -76,8 +77,8 @@ def run(centerword, contextWords, negSamples_list):
 
             curr_vec = update_o_grad(curr_entry, curr_grad)
             assert type(curr_vec) == np.ndarray
-            curr_vec = curr_vec.tolist()
-            assert type(curr_vec) == list
+            # curr_vec = curr_vec.tolist()
+            # assert type(curr_vec) == list
             assert len(curr_vec) == 16
 
             negSamples_list[index]['vector'] = curr_vec  # 更新完才开始下一轮
@@ -91,7 +92,7 @@ def run(centerword, contextWords, negSamples_list):
     voca_model.update_vec(cen_entry, i_vec)
 
     for sampleEntry in negSamples_list: 
-        assert type(sampleEntry['vector']) == list
+        assert type(sampleEntry['vector']) == np.ndarray
         assert len(sampleEntry['vector']) == 16
         voca_model.update_vec(sampleEntry, sampleEntry['vector'])
 

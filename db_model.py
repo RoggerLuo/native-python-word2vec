@@ -14,7 +14,7 @@ def connect2Mysql():
 def fetch_entry_untreated(version=0):
     conn, cursor = connect2Mysql()
     cursor.execute(
-        'select * from t_item where version = %s limit 0,1', (version,))
+        'select * from t_item where version = %s and id = %s limit 0,1', (version,1387))
     values = cursor.fetchall()
     cursor.close()
     conn.close()

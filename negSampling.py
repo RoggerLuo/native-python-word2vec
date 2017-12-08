@@ -19,7 +19,9 @@ def calcGrad(activation, vector):
 
 
 def get_o_vec_from_entry(entry):
-    current_vector = np.array(entry['vector'])  # 测试的时候把json取消
+    assert type(entry['vector']) == np.ndarray
+
+    current_vector = entry['vector']  # 测试的时候把json取消
     # current_vector = np.array(json.loads(entry[2]))  # 测试的时候把json取消
     halfNum = int(len(current_vector) / 2)
     curr_o_vec = current_vector[halfNum:]
@@ -36,7 +38,7 @@ def get_cost_and_grad(centerword_vector, target_vector, negSamples_list, K=10):
     assert type(negSamples_list) == list
     assert type(negSamples_list[0]) == dict
     assert type(negSamples_list[0]['id']) == int
-    assert type(negSamples_list[0]['vector']) == list
+    assert type(negSamples_list[0]['vector']) == np.ndarray
     assert len(negSamples_list[0]['vector']) == 16
 
 

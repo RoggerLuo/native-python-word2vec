@@ -11,6 +11,7 @@ import voca_model
 
 
 def get(contextWords, k=10):
+    
     returnValues = voca_model.getNegSameples(contextWords, k)
 
     uniqueSamples = []

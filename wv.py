@@ -14,7 +14,7 @@ def getStartVector():
     wordVectors = np.concatenate(
         (randomStartVector / dimVectors, zerosVector), axis=0)
     wordVectors = wordVectors.tolist()
-    wordVectors = [round(vector, 5) for vector in wordVectors]
+    # wordVectors = [round(vector, 2) for vector in wordVectors]
     return wordVectors
 
 
@@ -37,7 +37,7 @@ def filterWord(arr):
 def getIdAndVector(word):
     entrys = voca_model.getWordEntrys(word)
     if len(entrys) == 0:
-        startVector = getStartVector()
+        startVector = np.array(getStartVector())
         insert_id = voca_model.insertVocabulary(word, startVector)
         return insert_id, startVector
     else:
