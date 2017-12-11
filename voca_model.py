@@ -9,12 +9,15 @@ def createJson():
 
 def saveJson():
     voca_model = globalVar.get('voca_model')  # 0.3 的效果不好
+    
     for i  in range(len(voca_model)):
         voca_model[i]['vector'] = voca_model[i]['vector'].tolist()
     # voca_model = {'test': 'testValue'}  # 存放读取的数据
     with open("./data.json", 'w', encoding='utf-8') as json_file:
         json.dump(voca_model, json_file, ensure_ascii=False)
 
+    for i  in range(len(voca_model)):
+        voca_model[i]['vector'] = np.array(voca_model[i]['vector'])
 
 def readJson():
     with open("./data.json", 'r', encoding='utf-8') as json_file:
@@ -58,13 +61,18 @@ def insertVocabulary(word, startVector):
 
 
 def getNegSameples(contextWords, k=10):
-    voca_model = globalVar.get('voca_model')
+    voca_model = globalVar.get('voca_model')    
     num = len(voca_model) - 1
     if num <= 0: return []
-    voca_model = globalVar.get('voca_model')
+    
+    # voca_model = globalVar.get('voca_model')
     values = [] 
+
     for index in range(50):
-        values.append(voca_model[np.random.randint(num)])
+        randomEntry = voca_model[np.random.randint(num)]
+        assert type(randomEntry['vector']) == np.ndarray
+        values.append(randomEntry)
+
     return values
 
 # def getAll():
@@ -78,7 +86,35 @@ def getWordById(entryId):
     voca_model = globalVar.get('voca_model')
     return voca_model[entryId]
     # cursor.execute('select * from t_vocabulary where id = %s', (entryId,))
-    # values = cursor.fetchall()
-    # return values[0]
+
+
+
+
+def test(word,length=10):
+    entrys = getWordEntrys(word)
+    if len(entrys) == 0:
+        print('没找到')
+    cen_entry = entrys[0]
+    
+    voca_model = globalVar.get('voca_model')    
+    allEntrys = voca_model
+    unsortedList = []
+    for et in allEntrys:
+        deviationArr = cen_entry['vector'] - et['vector']
+        # deviationArr = np.fabs(deviationArr)
+        deviationArr = [round(de, 5) for de in deviationArr.tolist()]
+        deviationArr = np.square(np.array(deviationArr))
+        deviation = np.sum(deviationArr)
+        unsortedList.append({'deviation': deviation, 'id': et['id']})
+    sortedList = sorted(unsortedList, key=lambda dic: dic['deviation'])
+    for nearId in sortedList[0:length]:
+        print(getWordById(nearId['id'])['word'])
+
+#  可以考虑过滤一下一些不要的词
+
+
+
+
+
 
 

@@ -11,14 +11,11 @@ import voca_model
 
 
 def get(contextWords, k=10):
-    
     returnValues = voca_model.getNegSameples(contextWords, k)
-
     uniqueSamples = []
     for entry in returnValues:
         
         if entry['word'] not in contextWords:
-
 
             uniqueSamples.append(entry)
             if len(uniqueSamples) >= k:
@@ -28,6 +25,5 @@ def get(contextWords, k=10):
     return uniqueSamples
     # ls = neg_entry2list(uniqueSamples)
     # return ls
-
 
 

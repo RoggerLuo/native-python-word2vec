@@ -41,6 +41,7 @@ def run(centerword, contextWords, negSamples_list):
     assert type(contextWords) == list
     # print(type(negSamples_list))
     assert type(negSamples_list) == list
+    assert type(negSamples_list[0]['vector']) == np.ndarray
 
     cen_entry, cent_vec = getEntry_and_makeList(centerword)
     cent_vec = np.array(cent_vec)

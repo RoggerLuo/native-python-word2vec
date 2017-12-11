@@ -14,6 +14,8 @@ def singleEntry(entry):
         negSamples_list = neg_samples.get(contextWords, sampleNum)
         if len(negSamples_list) == 0: return 
         assert type(negSamples_list[0]) == dict
+
+
         _cost = skipgram.run(centerword, contextWords, negSamples_list)
         cost += _cost
     if len(trainingPairs) != 0:

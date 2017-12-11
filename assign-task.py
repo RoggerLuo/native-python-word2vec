@@ -22,7 +22,7 @@ for i in range(1000000):
     print('第 %d 次运行' % (i,))
     globalVar.set('step', 0.1)
     entry = db_model.fetch_entry_untreated(version)
-    
+    # print(entry)
     if entry == False: 
         print('没有version为%s的entry了' % version)
         break

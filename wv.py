@@ -5,7 +5,9 @@ import numpy as np
 import voca_model
 
 dimVectors = 8
-ignoreds = ['，', ',', '的', '是', '\n', ' ','(',')','.','/']
+ignoreds = ['，', ',', 
+'的', '是', '\n', ' ','(',')','.','/'
+]
 
 
 def getStartVector():

@@ -34,26 +34,3 @@ def mark_entry_as_treated(entryId, version=0):
     insert_id = cursor.lastrowid
     conn.commit()
     cursor.close()
-
-
-def test(word):
-    entrys = getWordEntrys(word)
-    if len(entrys) == 0:
-        print('没找到')
-    cen_entry = entrys[0]
-    allEntrys = getAll()
-    unsortedList = []
-    for et in allEntrys:
-        deviationArr = np.array(json.loads(
-            cen_entry[2])) - np.array(json.loads(et[2]))
-        # deviationArr = np.fabs(deviationArr)
-        deviationArr = [round(de, 3) for de in deviationArr.tolist()]
-        deviationArr = np.square(np.array(deviationArr))
-        deviation = np.sum(deviationArr)
-        unsortedList.append({'deviation': deviation, 'id': et[0]})
-    sortedList = sorted(unsortedList, key=lambda dic: dic['deviation'])
-    for nearId in sortedList[0:10]:
-        print(getWordById(nearId['id'])[1])
-
-
-# testGetNearest('人生')
