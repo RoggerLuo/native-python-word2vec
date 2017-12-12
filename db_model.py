@@ -34,3 +34,31 @@ def mark_entry_as_treated(entryId, version=0):
     insert_id = cursor.lastrowid
     conn.commit()
     cursor.close()
+
+
+def update_entry_vector(entryId, vec):
+    assert type(vec) == list
+    vecStr = json.dumps(vec)
+    conn, cursor = connect2Mysql()
+    cursor.execute('update t_item set vector = %s where id = %s', [
+                   vecStr, entryId])
+    # insert_id = cursor.lastrowid
+    conn.commit()
+    cursor.close()
+
+
+def fetch_all(version=0):
+    conn, cursor = connect2Mysql()
+    cursor.execute('select * from t_item')
+    values = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return values
+
+def fetch_by_id(entryId=1):
+    conn, cursor = connect2Mysql()
+    cursor.execute('select * from t_item where id = %s',[entryId,])
+    values = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return values[0]

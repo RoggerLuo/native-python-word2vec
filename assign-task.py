@@ -4,7 +4,7 @@ import globalVar
 import voca_model
 
 
-version = 1
+version = 3
 repeatedTimes_forTheSameNegSample = 10  # 这个太高，貌似会出现inf
 
 

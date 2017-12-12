@@ -30,13 +30,7 @@ def readJson():
 
 
 def update_vec(entry, vec):  # entry 直接传这个词所在的index
-    # if type(vec) == np.ndarray:
-        # vec = vec.tolist()            
-    # assert type(vec) == np.ndarray
-    # vec = [round(v, 5) for v in vec]
-    # vec = json.dumps(vec)
     assert type(vec) == np.ndarray
-
     voca_model = globalVar.get('voca_model')
     voca_model[entry['id']]['vector'] = vec
 
@@ -89,26 +83,6 @@ def getWordById(entryId):
 
 
 
-
-def test(word,length=10):
-    entrys = getWordEntrys(word)
-    if len(entrys) == 0:
-        print('没找到')
-    cen_entry = entrys[0]
-    
-    voca_model = globalVar.get('voca_model')    
-    allEntrys = voca_model
-    unsortedList = []
-    for et in allEntrys:
-        deviationArr = cen_entry['vector'] - et['vector']
-        # deviationArr = np.fabs(deviationArr)
-        deviationArr = [round(de, 5) for de in deviationArr.tolist()]
-        deviationArr = np.square(np.array(deviationArr))
-        deviation = np.sum(deviationArr)
-        unsortedList.append({'deviation': deviation, 'id': et['id']})
-    sortedList = sorted(unsortedList, key=lambda dic: dic['deviation'])
-    for nearId in sortedList[0:length]:
-        print(getWordById(nearId['id'])['word'])
 
 #  可以考虑过滤一下一些不要的词
 
